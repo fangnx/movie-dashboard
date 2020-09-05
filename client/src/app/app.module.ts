@@ -1,20 +1,37 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MaterialModule } from "../material/material.module";
+import { MaterialModule } from "./components/material/material.module";
+import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { BannerComponent } from "./components/banner/banner.component";
+import { OmdbService } from "./services/omdb.service";
+
+import { StoreModule } from "@ngrx/store";
+import { EffectsModule } from "@ngrx/effects";
+import { appReducer } from "./state/app.reducer";
+import { AppEffects } from "./state/app.effects";
+import { ResultPanelComponent } from './components/dashboard/result-panel/result-panel.component';
+import { NominationPanelComponent } from './components/dashboard/nomination-panel/nomination-panel.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, DashboardComponent, BannerComponent, ResultPanelComponent, NominationPanelComponent],
   imports: [
+    StoreModule.forRoot({ app: appReducer }),
+    EffectsModule.forRoot([AppEffects]),
+
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    HttpClientModule,
+    FormsModule,
   ],
-  providers: [],
+  providers: [OmdbService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

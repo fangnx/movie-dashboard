@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  omdbApiKey: "ad526d24",
 };

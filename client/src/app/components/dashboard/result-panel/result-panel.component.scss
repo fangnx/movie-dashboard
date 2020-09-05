@@ -1,0 +1,13 @@
+mat-card {
+  mat-header-row > .mat-column-title {
+    flex-grow: 2;
+  }
+
+  mat-row > .mat-column-title {
+    flex-grow: 2;
+  }
+
+  img {
+    width: 3rem;
+  }
+}

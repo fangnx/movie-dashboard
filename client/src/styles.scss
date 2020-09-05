@@ -1,4 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/theming";
+@import "./style-variables/colors.scss";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// Overriding default Angular Material variables.
+$custom-typography: mat-typography-config(
+  $font-family: "Muli",
+);
+
+@include angular-material-typography($custom-typography);
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
