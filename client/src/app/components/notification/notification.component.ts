@@ -40,4 +40,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
   public handleOkClick(): void {
     this.notification = null;
   }
+
+  public get mainClass(): string {
+    return this.notification ? "" : "hidden";
+  }
 }

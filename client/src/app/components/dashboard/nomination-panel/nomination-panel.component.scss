@@ -1,7 +1,6 @@
 div {
   background: #fff;
-  height: 575px;
-  width: 600px;
+  height: 500px;
 
   > section {
     &:first-child {
@@ -19,8 +18,7 @@ div {
     &:nth-child(2) {
       mat-table {
         overflow: auto;
-        height: 440px;
-        width: 600px;
+        height: 365px;
 
         mat-header-row > .mat-column-title {
           flex-grow: 2;

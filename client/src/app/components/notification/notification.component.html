@@ -1,8 +1,8 @@
-<main *ngIf="notification">
+<main [ngClass]="mainClass">
   <div class="table-container mat-elevation-z8">
     <section>
       <article>
-        <span [innerHTML]="notification.message"></span>
+        <span [innerHTML]="notification && notification.message"></span>
       </article>
 
       <article>

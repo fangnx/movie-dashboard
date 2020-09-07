@@ -39,4 +39,8 @@ export class NominationPanelComponent implements OnChanges {
   public get progressBarValue(): number {
     return (this.nominatedMovies.length / 5) * 100;
   }
+
+  public get currentUri(): string {
+    return window.location.toString();
+  }
 }

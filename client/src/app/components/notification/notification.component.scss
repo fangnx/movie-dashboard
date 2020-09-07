@@ -1,4 +1,8 @@
 main {
+  &.hidden {
+    visibility: hidden;
+  }
+
   > div {
     background: #fff;
     height: 50px;
