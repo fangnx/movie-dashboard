@@ -20,7 +20,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.notificationSubscription = this.notificationService
       .onNotify()
       .subscribe((notification) => {
@@ -33,7 +33,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.store.dispatch(AppActions.checkNominationStatus());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.notificationSubscription.unsubscribe();
   }
 

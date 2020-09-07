@@ -1,21 +1,25 @@
-main {
-  &.hidden {
-    visibility: hidden;
-  }
+:host {
+  display: block;
 
-  > div {
-    background: #fff;
-    height: 50px;
+  main {
+    &.hidden {
+      visibility: hidden;
+    }
 
-    > section {
-      display: flex;
-      justify-content: space-between;
-      line-height: 50px;
-      padding: 0 20px 0 20px;
+    > div {
+      background: #fff;
+      height: 50px;
 
-      > article {
-        button {
-          margin-left: 5px;
+      > section {
+        display: flex;
+        justify-content: space-between;
+        line-height: 50px;
+        padding: 0 20px 0 20px;
+
+        > article {
+          button {
+            margin-left: 5px;
+          }
         }
       }
     }

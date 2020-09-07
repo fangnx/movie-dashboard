@@ -1,27 +1,39 @@
 main {
   display: flex;
   flex-direction: column;
+  height: 100%;
+
+  .header-section {
+    mat-toolbar {
+      padding: 0 50px 0 50px;
+    }
+  }
 
   .notification-section {
-    margin: auto;
     width: 100%;
+
+    > notification {
+      margin: 0 30px 0 30px;
+    }
   }
 
   .main-section {
     display: flex;
+    flex: 1;
     flex-direction: column;
+    height: 0;
     margin: 0 30px 0 30px;
-    padding: 20px 0 20px;
+    padding: 20px 0 20px 0;
 
     > result-panel,
     nomination-panel {
       margin: 10px 0 10px 0;
-      min-width: 500px;
+      min-width: 475px;
       width: 100%;
     }
   }
 
-  @media only screen and (min-width: 1100px) {
+  @media only screen and (min-width: 1024px) {
     .main-section {
       display: flex;
       flex-direction: row;
@@ -29,14 +41,27 @@ main {
 
       > result-panel,
       nomination-panel {
+        margin: 0;
         width: 48%;
       }
     }
   }
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 640px) {
+    .header-section {
+      mat-toolbar {
+        padding: 0 20px 0 20px;
+      }
+    }
+
+    .notification-section {
+      > notification {
+        margin: 0;
+      }
+    }
     .main-section {
       margin: 0;
+      padding: 10px 0 0 0;
     }
   }
 }

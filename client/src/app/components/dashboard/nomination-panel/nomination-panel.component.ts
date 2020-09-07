@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { Movie } from "../../../models/omdb.model";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
-import { getTreeMissingMatchingNodeDefError } from "@angular/cdk/tree";
+import { ClipboardHelper } from "../../helpers/clipboard.helper";
 
 @Component({
   selector: "nomination-panel",
@@ -40,7 +40,7 @@ export class NominationPanelComponent implements OnChanges {
     return (this.nominatedMovies.length / 5) * 100;
   }
 
-  public get currentUri(): string {
-    return window.location.toString();
+  public handleShareClick(): void {
+    ClipboardHelper.copyToClipboard(window.location.toString());
   }
 }

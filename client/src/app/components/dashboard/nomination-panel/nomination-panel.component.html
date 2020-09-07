@@ -1,8 +1,19 @@
 <div class="table-container mat-elevation-z8">
   <section>
     <article>
-      <h3>Nominations</h3>
-      <button class="small" mat-raised-button color="primary">Share</button>
+      <h3>My Nominations</h3>
+      <button
+        (click)="handleShareClick()"
+        class="small"
+        mat-raised-button
+        #tooltip="matTooltip"
+        matTooltip="Copy URL to save the nominations"
+        matTooltipPosition="left"
+        matTooltipHideDelay="500"
+        color="primary"
+      >
+        Save Nominations
+      </button>
     </article>
   </section>
 
