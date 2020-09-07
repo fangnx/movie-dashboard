@@ -6,11 +6,6 @@ import { Subject, Observable } from "rxjs";
 export class NotificationService {
   private subject = new Subject<Notification>();
 
-  // enable subscribing to alerts observable
-  // onAlert(id = this.defaultId): Observable<Alert> {
-  //   return this.subject.asObservable().pipe(filter((x) => x && x.id === id));
-  // }
-
   public onNotify(): Observable<Notification> {
     return this.subject.asObservable();
   }
@@ -37,8 +32,7 @@ export class NotificationService {
     );
   }
 
-  // // clear alerts
-  // clear(id = this.defaultId) {
-  //   this.subject.next(new Alert({ id }));
-  // }
+  public clear(): void {
+    this.subject.next();
+  }
 }

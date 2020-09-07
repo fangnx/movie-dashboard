@@ -3,9 +3,13 @@ main {
   flex-direction: column;
   height: 100vh;
 
+  .notification-section {
+    margin: auto;
+    width: 1300px;
+  }
+
   .main-section {
     display: flex;
-    flex-direction: row;
     width: 1300px;
     justify-content: space-between;
     margin: auto;

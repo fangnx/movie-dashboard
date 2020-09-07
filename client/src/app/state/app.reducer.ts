@@ -79,7 +79,17 @@ export const appReducer = createReducer(
 
 export const localStorageSyncReducer = (reducer) => {
   return localStorageSync({
-    keys: [{ app: ["nominatedMovies", "searchTerm"] }],
+    keys: [
+      {
+        app: [
+          "nominatedMovies",
+          "searchTerm",
+          "movies",
+          "page",
+          "numOfResults",
+        ],
+      },
+    ],
     rehydrate: true,
   })(reducer);
 };

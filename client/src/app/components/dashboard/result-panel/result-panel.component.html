@@ -46,7 +46,7 @@
         <mat-cell *matCellDef="let movie">
           <button
             (click)="handleNominationClick(movie)"
-            [disabled]="isMovieNominated(movie)"
+            [disabled]="!canNominate(movie)"
             class="small"
             mat-raised-button
             color="basic"

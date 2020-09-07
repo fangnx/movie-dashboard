@@ -15,7 +15,6 @@ export class OmdbService {
     searchTerm: string,
     page: number = 1
   ): Observable<SearchResponse> {
-    console.log(searchTerm + " " + page);
     let params = new HttpParams();
     params = params.append("apikey", environment.omdbApiKey);
     params = params.append("type", SearchType.movie);

@@ -59,7 +59,11 @@ export class ResultPanelComponent implements OnChanges {
     this.nominateMovie.emit(movie);
   }
 
-  public isMovieNominated(movie: Movie): boolean {
+  public canNominate(movie: Movie): boolean {
+    return this.nominatedMovies.length < 5 && !this.isMovieNominated(movie);
+  }
+
+  private isMovieNominated(movie: Movie): boolean {
     return (
       this.nominatedMovies &&
       this.nominatedMovies.some(

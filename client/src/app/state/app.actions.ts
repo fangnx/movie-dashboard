@@ -32,3 +32,7 @@ export const goToPage = createAction(
   "[App] Go to Page",
   props<{ page: number }>()
 );
+
+export const checkNominationStatus = createAction(
+  "[App] Check Nomination Status"
+);
