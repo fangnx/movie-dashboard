@@ -1,13 +1,55 @@
-mat-card {
-  mat-header-row > .mat-column-title {
-    flex-grow: 2;
-  }
+div {
+  background: #fff;
+  height: 575px;
+  width: 600px;
 
-  mat-row > .mat-column-title {
-    flex-grow: 2;
-  }
+  > section {
+    &:first-child {
+      height: 75px;
 
-  img {
-    width: 3rem;
+      > article {
+        align-items: center;
+        display: flex;
+        line-height: 75px;
+        justify-content: space-between;
+        padding: 0 20px 0 20px;
+      }
+    }
+
+    &:nth-child(2) {
+      mat-table {
+        overflow: auto;
+        height: 440px;
+        width: 600px;
+
+        mat-header-row > .mat-column-title {
+          flex-grow: 2;
+        }
+
+        mat-row > .mat-column-title {
+          flex-grow: 2;
+        }
+
+        img {
+          height: 30px;
+        }
+
+        button {
+          width: 100px;
+        }
+      }
+    }
+
+    &:last-child {
+      height: 60px;
+
+      > article {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        padding: 0 20px 0 20px;
+      }
+    }
   }
 }

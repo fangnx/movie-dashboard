@@ -1,38 +1,73 @@
-<mat-card>
-  <mat-table *ngIf="movies" [dataSource]="dataSource">
-    <ng-container matColumnDef="poster">
-      <mat-header-cell *matHeaderCellDef>Poster</mat-header-cell>
-      <mat-cell *matCellDef="let movie">
-        <img [src]="movie.Poster" />
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-      <mat-cell *matCellDef="let movie">{{ movie.Title }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="year">
-      <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
-      <mat-cell *matCellDef="let movie">{{ movie.Year }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="nomination">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell *matCellDef="let movie">
+<div class="table-container mat-elevation-z8">
+  <section>
+    <article>
+      <mat-form-field>
+        <mat-label>Search Movies</mat-label>
+        <input
+          (keydown)="handleKeydown($event)"
+          [(ngModel)]="searchTerm"
+          matInput
+          type="text"
+        />
         <button
-          (click)="handleNominationClick(movie)"
-          [disabled]="isMovieNominated(movie)"
-          mat-raised-button
-          color="primary"
+          (click)="handleClearSearch()"
+          mat-button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
         >
-          Nominate
+          <mat-icon>close</mat-icon>
         </button>
-      </mat-cell>
-    </ng-container>
+      </mat-form-field>
+    </article>
+  </section>
 
-    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+  <section>
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="poster">
+        <mat-header-cell *matHeaderCellDef>Poster</mat-header-cell>
+        <mat-cell *matCellDef="let movie">
+          <img [src]="movie.Poster" />
+        </mat-cell>
+      </ng-container>
 
-    <mat-row *matRowDef="let row; columns: columns"></mat-row>
-  </mat-table>
-</mat-card>
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+        <mat-cell *matCellDef="let movie">{{ movie.Title }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="year">
+        <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
+        <mat-cell *matCellDef="let movie">{{ movie.Year }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nomination">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let movie">
+          <button
+            (click)="handleNominationClick(movie)"
+            [disabled]="isMovieNominated(movie)"
+            class="small"
+            mat-raised-button
+            color="basic"
+          >
+            Nominate
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+    </mat-table>
+  </section>
+
+  <section>
+    <mat-paginator
+      [pageIndex]="paginatorIndex"
+      [pageSize]="10"
+      [length]="total"
+      (page)="handlePaginatorChange($event)"
+      showFirstLastButtons
+    ></mat-paginator>
+  </section>
+</div>

@@ -1,7 +1,13 @@
 main {
-  // display: grid;
-  // grid-template-areas:
-  //   "a a a"
-  //   "b c c";
-  // width: 500px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .main-section {
+    display: flex;
+    flex-direction: row;
+    width: 1300px;
+    justify-content: space-between;
+    margin: auto;
+  }
 }

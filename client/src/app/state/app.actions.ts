@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Movie } from "../models/omdb.model";
+import { Movie, SearchResponse } from "../models/omdb.model";
 
 export const searchForMovies = createAction(
   "[App] Search for Movies",
@@ -8,7 +8,7 @@ export const searchForMovies = createAction(
 
 export const fetchMoviesSuccess = createAction(
   "[App] Fetch Movies Success",
-  props<{ movies: Movie[] }>()
+  props<{ searchResponse: SearchResponse; resetPage?: boolean }>()
 );
 
 export const selectMovie = createAction(
@@ -19,4 +19,16 @@ export const selectMovie = createAction(
 export const unselectMovie = createAction(
   "[App] Unselect Movie",
   props<{ movieId: string }>()
+);
+
+export const enterSearchTerm = createAction(
+  "[App] Enter Search Term",
+  props<{ searchTerm: string }>()
+);
+
+export const clearSearch = createAction("[App] Clear Search");
+
+export const goToPage = createAction(
+  "[App] Go to Page",
+  props<{ page: number }>()
 );

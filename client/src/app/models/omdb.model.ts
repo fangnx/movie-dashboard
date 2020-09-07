@@ -14,5 +14,6 @@ export enum SearchType {
 
 export interface SearchResponse {
   Response: boolean;
+  totalResults: string;
   Search: Movie[];
 }

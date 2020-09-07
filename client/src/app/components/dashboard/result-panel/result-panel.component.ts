@@ -5,8 +5,9 @@ import {
   OnChanges,
   Output,
   EventEmitter,
+  ViewChild,
 } from "@angular/core";
-import { MatTableDataSource } from "@angular/material";
+import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { Movie } from "../../../models/omdb.model";
 
 @Component({
@@ -16,15 +17,42 @@ import { Movie } from "../../../models/omdb.model";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResultPanelComponent implements OnChanges {
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
   @Input() public movies: Movie[];
+  @Input() public total: number;
+  @Input() public page: number;
   @Input() public nominatedMovies: Movie[];
+  @Input() public searchTerm: string;
+
+  @Output() public enterSearch: EventEmitter<string> = new EventEmitter();
+  @Output() public clearSearch: EventEmitter<void> = new EventEmitter();
   @Output() public nominateMovie: EventEmitter<Movie> = new EventEmitter();
+  @Output() public changePage: EventEmitter<number> = new EventEmitter();
 
   public columns: string[] = ["poster", "title", "year", "nomination"];
   public dataSource;
 
-  public ngOnChanges() {
+  ngOnChanges(): void {
     this.dataSource = new MatTableDataSource<Movie>(this.movies);
+  }
+
+  public handleKeydown(event: KeyboardEvent) {
+    if (event.key == "Enter") {
+      this.handleSearch();
+    }
+  }
+
+  public handleSearch(): void {
+    this.enterSearch.emit(this.searchTerm);
+  }
+
+  public handleClearSearch(): void {
+    this.clearSearch.emit();
+  }
+
+  public handlePaginatorChange(event): void {
+    this.changePage.emit(event.pageIndex);
   }
 
   public handleNominationClick(movie: Movie): void {
@@ -38,5 +66,9 @@ export class ResultPanelComponent implements OnChanges {
         (nominatedMovie) => nominatedMovie.imdbID === movie.imdbID
       )
     );
+  }
+
+  public get paginatorIndex(): number {
+    return this.page - 1;
   }
 }

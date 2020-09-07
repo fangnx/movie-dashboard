@@ -13,7 +13,17 @@ export const selectNominatedMovies = createSelector(
   (state: AppState) => state.nominatedMovies
 );
 
-export const selectUser = createSelector(
+export const selectNumOfResults = createSelector(
   selectAppState,
-  (state: AppState) => state.user
+  (state: AppState) => state.numOfResults
+);
+
+export const selectPage = createSelector(
+  selectAppState,
+  (state: AppState) => state.page
+);
+
+export const selectSearchTerm = createSelector(
+  selectAppState,
+  (state: AppState) => state.searchTerm
 );

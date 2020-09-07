@@ -5,9 +5,11 @@ import {
   Input,
   Output,
   EventEmitter,
+  ViewChild,
 } from "@angular/core";
 import { Movie } from "../../../models/omdb.model";
-import { MatTableDataSource } from "@angular/material";
+import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { getTreeMissingMatchingNodeDefError } from "@angular/cdk/tree";
 
 @Component({
   selector: "nomination-panel",
@@ -16,6 +18,8 @@ import { MatTableDataSource } from "@angular/material";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NominationPanelComponent implements OnChanges {
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
   @Input() nominatedMovies: Movie[];
   @Output() public removeNominatedMovie: EventEmitter<
     string
@@ -24,11 +28,15 @@ export class NominationPanelComponent implements OnChanges {
   public columns: string[] = ["poster", "title", "year", "nomination"];
   public dataSource;
 
-  public ngOnChanges() {
+  ngOnChanges(): void {
     this.dataSource = new MatTableDataSource<Movie>([...this.nominatedMovies]);
-    console.log([...this.nominatedMovies]);
   }
+
   public handleRemoveClick(movie: Movie): void {
     this.removeNominatedMovie.emit(movie.imdbID);
+  }
+
+  public get progressBarValue(): number {
+    return (this.nominatedMovies.length / 5) * 100;
   }
 }

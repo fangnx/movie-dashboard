@@ -1,36 +1,31 @@
 <main>
-  <section>
-    <mat-card>
-      <mat-form-field class="example-form-field">
-        <mat-label>Search Movie</mat-label>
-        <input
-          (keydown)="handleKeydown($event)"
-          matInput
-          type="text"
-          [(ngModel)]="searchValue"
-        />
-        <button
-          mat-button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="handleButtonClick()"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field></mat-card
-    >
+  <section class="header-section">
+    <mat-toolbar color="primary">
+      <button
+        mat-icon-button
+        class="example-icon"
+        aria-label="Example icon-button with menu icon"
+      ></button>
+      <span>Movie Nominations</span>
+      <span class="example-spacer"></span>
+    </mat-toolbar>
   </section>
 
-  <section>
+  <notification></notification>
+
+  <section class="main-section">
     <result-panel
       [movies]="movies$ | async"
+      [total]="numOfResults$ | async"
+      [page]="page$ | async"
       [nominatedMovies]="nominatedMovies$ | async"
+      [searchTerm]="searchTerm$ | async"
+      (enterSearch)="handleEnterSearch($event)"
+      (clearSearch)="handlecClearSearch()"
       (nominateMovie)="handleNominateMovie($event)"
+      (changePage)="handleChangePage($event)"
     ></result-panel>
-  </section>
 
-  <section>
     <nomination-panel
       [nominatedMovies]="nominatedMovies$ | async"
       (removeNominatedMovie)="handleRemoveNominatedMovie($event)"
