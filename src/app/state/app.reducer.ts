@@ -32,61 +32,63 @@ const initialState: AppState = adapter.getInitialState(<AppState>{
   nominatedMovies: [],
 });
 
-export const appReducer = createReducer(
-  initialState,
-  on(fetchMoviesSuccess, (state, { searchResponse, resetPage }) => {
-    const page: number = resetPage ? 1 : state.page;
-    if (searchResponse.Response) {
+export function appReducer(state, action) {
+  return createReducer(
+    initialState,
+    on(fetchMoviesSuccess, (state, { searchResponse, resetPage }) => {
+      const page: number = resetPage ? 1 : state.page;
+      if (searchResponse.Response) {
+        return {
+          ...state,
+          movies: searchResponse.Search,
+          numOfResults: +searchResponse.totalResults,
+          page,
+        };
+      }
       return {
         ...state,
-        movies: searchResponse.Search,
-        numOfResults: +searchResponse.totalResults,
+        movies: [],
+        numOfResults: 0,
         page,
       };
-    }
-    return {
+    }),
+    on(populateNominationsSuccess, (state, { movies }) => {
+      if (movies) {
+        return {
+          ...state,
+          nominatedMovies: movies,
+        };
+      }
+      return state;
+    }),
+    on(selectMovie, (state, { movie }) => ({
       ...state,
+      nominatedMovies: [...state.nominatedMovies, movie],
+    })),
+    on(unselectMovie, (state, { movieId }) => ({
+      ...state,
+      nominatedMovies: state.nominatedMovies.filter(
+        (movie) => movie.imdbID !== movieId
+      ),
+    })),
+    on(enterSearchTerm, (state, { searchTerm }) => ({
+      ...state,
+      searchTerm,
+    })),
+    on(clearSearch, (state) => ({
+      ...state,
+      searchTerm: null,
+      page: 1,
       movies: [],
-      numOfResults: 0,
+    })),
+    on(goToPage, (state, { page }) => ({
+      ...state,
       page,
-    };
-  }),
-  on(populateNominationsSuccess, (state, { movies }) => {
-    if (movies) {
-      return {
-        ...state,
-        nominatedMovies: movies,
-      };
-    }
-    return state;
-  }),
-  on(selectMovie, (state, { movie }) => ({
-    ...state,
-    nominatedMovies: [...state.nominatedMovies, movie],
-  })),
-  on(unselectMovie, (state, { movieId }) => ({
-    ...state,
-    nominatedMovies: state.nominatedMovies.filter(
-      (movie) => movie.imdbID !== movieId
-    ),
-  })),
-  on(enterSearchTerm, (state, { searchTerm }) => ({
-    ...state,
-    searchTerm,
-  })),
-  on(clearSearch, (state) => ({
-    ...state,
-    searchTerm: null,
-    page: 1,
-    movies: [],
-  })),
-  on(goToPage, (state, { page }) => ({
-    ...state,
-    page,
-  }))
-);
+    }))
+  )(state, action);
+}
 
-export const localStorageSyncReducer = (reducer) => {
+export function localStorageSyncReducer(reducer) {
   return localStorageSync({
     keys: [
       {
@@ -95,4 +97,4 @@ export const localStorageSyncReducer = (reducer) => {
     ],
     rehydrate: true,
   })(reducer);
-};
+}
