@@ -1,9 +1,10 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity";
-import { createReducer, on, ActionReducerMap } from "@ngrx/store";
+import { createReducer, on } from "@ngrx/store";
 import { localStorageSync } from "ngrx-store-localstorage";
 import {
   selectMovie,
   fetchMoviesSuccess,
+  populateNominationsSuccess,
   unselectMovie,
   enterSearchTerm,
   goToPage,
@@ -34,7 +35,6 @@ const initialState: AppState = adapter.getInitialState(<AppState>{
 export const appReducer = createReducer(
   initialState,
   on(fetchMoviesSuccess, (state, { searchResponse, resetPage }) => {
-    // TODO: remove.
     const page: number = resetPage ? 1 : state.page;
     if (searchResponse.Response) {
       return {
@@ -50,6 +50,15 @@ export const appReducer = createReducer(
       numOfResults: 0,
       page,
     };
+  }),
+  on(populateNominationsSuccess, (state, { movies }) => {
+    if (movies) {
+      return {
+        ...state,
+        nominatedMovies: movies,
+      };
+    }
+    return state;
   }),
   on(selectMovie, (state, { movie }) => ({
     ...state,
@@ -81,13 +90,7 @@ export const localStorageSyncReducer = (reducer) => {
   return localStorageSync({
     keys: [
       {
-        app: [
-          "nominatedMovies",
-          "searchTerm",
-          "movies",
-          "page",
-          "numOfResults",
-        ],
+        app: ["searchTerm", "movies", "page", "numOfResults"],
       },
     ],
     rehydrate: true,

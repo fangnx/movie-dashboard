@@ -11,6 +11,16 @@ export const fetchMoviesSuccess = createAction(
   props<{ searchResponse: SearchResponse; resetPage?: boolean }>()
 );
 
+export const populateNominations = createAction(
+  "[App] Populate Nominations",
+  props<{ movieIds: string[] }>()
+);
+
+export const populateNominationsSuccess = createAction(
+  "[App] Populate Nominations Success",
+  props<{ movies: Movie[] }>()
+);
+
 export const selectMovie = createAction(
   "[App] Select Movie",
   props<{ movie: Movie }>()

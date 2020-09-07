@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { map } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { Observable, forkJoin, zip, combineLatest } from "rxjs";
 import { environment } from "../../environments/environment";
-import { SearchResponse, SearchType } from "../models/omdb.model";
+import { SearchResponse, SearchType, Movie } from "../models/omdb.model";
 
 @Injectable()
 export class OmdbService {
@@ -21,8 +20,18 @@ export class OmdbService {
     params = params.append("s", searchTerm);
     params = params.append("page", `${page}`);
 
-    return this.httpClient
-      .get<SearchResponse>(this.apiUri, { params })
-      .pipe(map((res) => res));
+    return this.httpClient.get<SearchResponse>(this.apiUri, { params });
+  }
+
+  public searchById(id: string): Observable<Movie> {
+    let params = new HttpParams();
+    params = params.append("apikey", environment.omdbApiKey);
+    params = params.append("i", id);
+
+    return this.httpClient.get<Movie>(this.apiUri, { params });
+  }
+
+  public searchByIds(ids: string[]): Observable<Movie[]> {
+    return forkJoin(ids.map((id) => this.searchById(id)));
   }
 }

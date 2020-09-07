@@ -1,5 +1,6 @@
 import { Injectable, Inject } from "@angular/core";
 import { Location } from "@angular/common";
+import { Router, ActivatedRoute } from "@angular/router";
 import { switchMap, map, withLatestFrom } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { Actions, ofType, Effect } from "@ngrx/effects";
@@ -19,6 +20,8 @@ import { UriHelper } from "../components/helpers/uri.helper";
 export class AppEffects {
   constructor(
     private store: Store<AppState>,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private actions$: Actions,
     private omdbService: OmdbService,
     private notificationService: NotificationService,
@@ -66,6 +69,18 @@ export class AppEffects {
   );
 
   @Effect()
+  fetchMoviesByIds$ = this.actions$.pipe(
+    ofType(AppActions.populateNominations),
+    switchMap((action) => {
+      return this.omdbService
+        .searchByIds(action.movieIds)
+        .pipe(
+          map((movies) => AppActions.populateNominationsSuccess({ movies }))
+        );
+    })
+  );
+
+  @Effect()
   checkNominationStatus$ = this.actions$.pipe(
     ofType(AppActions.selectMovie, AppActions.unselectMovie),
     withLatestFrom(this.store.select((state) => selectNominatedMovies(state))),
@@ -93,11 +108,19 @@ export class AppEffects {
     ofType(AppActions.selectMovie, AppActions.unselectMovie),
     withLatestFrom(this.store.select((state) => selectNominatedMovies(state))),
     switchMap(([_, nominatedMovies]) => {
-      if (nominatedMovies.length > 0) {
-        const params: string = UriHelper.generateParamsFromIds(
+      if (nominatedMovies.length === 0) {
+        this.location.go("");
+      } else {
+        const nominations: string = UriHelper.generateParamsFromIds(
           nominatedMovies.map((movie) => movie.imdbID)
         );
-        this.location.go(params);
+        const uri: string = this.router
+          .createUrlTree([], {
+            relativeTo: this.activatedRoute,
+            queryParams: { nominations },
+          })
+          .toString();
+        this.location.go(uri);
       }
 
       return EMPTY;

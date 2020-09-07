@@ -14,22 +14,16 @@ export class NotificationService {
     this.subject.next(notification);
   }
 
-  public success(message: string, options?: any): void {
-    this.notify(
-      new Notification({ ...options, type: NotificationType.Success, message })
-    );
+  public success(message: string): void {
+    this.notify(new Notification({ type: NotificationType.Success, message }));
   }
 
-  public info(message: string, options?: any): void {
-    this.notify(
-      new Notification({ ...options, type: NotificationType.Info, message })
-    );
+  public info(message: string): void {
+    this.notify(new Notification({ type: NotificationType.Info, message }));
   }
 
-  public warning(message: string, options?: any): void {
-    this.notify(
-      new Notification({ ...options, type: NotificationType.Warning, message })
-    );
+  public warning(message: string): void {
+    this.notify(new Notification({ type: NotificationType.Warning, message }));
   }
 
   public clear(): void {

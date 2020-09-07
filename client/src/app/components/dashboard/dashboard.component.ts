@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
@@ -19,17 +20,17 @@ import { Movie } from "../../models/omdb.model";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
-  public searchValue: string;
-
   public movies$: Observable<Movie[]>;
   public numOfResults$: Observable<Number>;
   public page$: Observable<Number>;
   public searchTerm$: Observable<string>;
   public nominatedMovies$: Observable<Movie[]>;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>, private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.initNominations();
+
     this.movies$ = this.store.select((state) => selectMovies(state));
 
     this.numOfResults$ = this.store.select((state) =>
@@ -43,6 +44,18 @@ export class DashboardComponent implements OnInit {
     );
 
     this.searchTerm$ = this.store.select((state) => selectSearchTerm(state));
+  }
+
+  private initNominations(): void {
+    if (
+      this.route.snapshot.queryParams &&
+      this.route.snapshot.queryParams.nominations
+    ) {
+      const movieIds: string[] = this.route.snapshot.queryParams.nominations.split(
+        ","
+      );
+      this.store.dispatch(AppActions.populateNominations({ movieIds }));
+    }
   }
 
   public handleEnterSearch(searchTerm): void {
