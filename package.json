@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "build-publish": "ng build --prod --output-path docs --baseHref='https://fangnx.github.io/movie-nominations/'",
+    "config": "ts-node ./setenv.ts",
+    "config:dev": "npm run config -- --env=dev",
+    "config:prod": "npm run config -- --env=prod",
+    "start": "npm run config:dev && ng serve",
+    "build": "npm run config:prod && ng build",
+    "build-publish": "npm run config:prod && ng build --output-path docs --baseHref='https://fangnx.github.io/movie-nominations/'",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

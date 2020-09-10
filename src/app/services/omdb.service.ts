@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable, forkJoin, zip, combineLatest } from "rxjs";
+import { Observable, forkJoin } from "rxjs";
 import { environment } from "../../environments/environment";
 import { SearchResponse, SearchType, Movie } from "../models/omdb.model";
 
 @Injectable()
 export class OmdbService {
-  private apiUri: string = "https://www.omdbapi.com/";
+  private apiUri: string = "http://www.omdbapi.com/";
 
   constructor(private httpClient: HttpClient) {}
 
