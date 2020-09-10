@@ -1,27 +1,33 @@
 # Movie Nominations
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
+An minimal Angular app to let users nominate their favorite movies from IMDB.
 
-## Development server
+### Built With
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- Angular 8.2
+- NgRx 8.4
+- Angular Material 8.2.3
+- [OMDb API](http://www.omdbapi.com/)
 
-## Code scaffolding
+## Getting Started
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Prerequisites
 
-## Build
+1. Get a free API key from [OMDb API](http://www.omdbapi.com/).
+2. Make sure [npm](https://www.npmjs.com/get-npm) is installed on your machine.
+3. Clone the repository:
+   ```
+   npm clone https://github.com/fangnx/movie-nominations
+   ```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Installation
 
-## Running unit tests
+```
+npm install
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Development
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```
+npm start
+```
