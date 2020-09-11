@@ -1,7 +1,6 @@
 <main>
   <section class="header-section">
     <mat-toolbar color="primary">
-      <!-- <button mat-icon-button></button> -->
       <span>Movie Nominations</span>
     </mat-toolbar>
   </section>
@@ -10,13 +9,14 @@
     <notification></notification>
   </section>
 
-  <section class="main-section">
+  <section [@fadeInOnEnter] class="main-section">
     <result-panel
       [movies]="movies$ | async"
       [total]="numOfResults$ | async"
       [page]="page$ | async"
       [nominatedMovies]="nominatedMovies$ | async"
       [searchTerm]="searchTerm$ | async"
+      [searchError]="searchError$ | async"
       (enterSearch)="handleEnterSearch($event)"
       (clearSearch)="handlecClearSearch()"
       (nominateMovie)="handleNominateMovie($event)"

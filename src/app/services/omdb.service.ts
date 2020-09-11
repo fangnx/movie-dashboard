@@ -6,7 +6,7 @@ import { SearchResponse, SearchType, Movie } from "../models/omdb.model";
 
 @Injectable()
 export class OmdbService {
-  private apiUri: string = "http://www.omdbapi.com/";
+  private apiUri: string = "https://www.omdbapi.com/";
 
   constructor(private httpClient: HttpClient) {}
 

@@ -6,8 +6,18 @@ import {
   Output,
   EventEmitter,
   ViewChild,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy,
+  SimpleChanges,
 } from "@angular/core";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { fromEvent, Subscription } from "rxjs";
+import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
+import {
+  fadeInOnEnterAnimation,
+  fadeOutOnLeaveAnimation,
+} from "angular-animations";
 import { Movie } from "../../../models/omdb.model";
 
 @Component({
@@ -15,36 +25,70 @@ import { Movie } from "../../../models/omdb.model";
   templateUrl: "./result-panel.component.html",
   styleUrls: ["./result-panel.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [fadeInOnEnterAnimation(), fadeOutOnLeaveAnimation()],
 })
-export class ResultPanelComponent implements OnChanges {
+export class ResultPanelComponent
+  implements OnChanges, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild("searchInput", { static: true }) input: ElementRef;
 
   @Input() public movies: Movie[];
   @Input() public total: number;
   @Input() public page: number;
   @Input() public nominatedMovies: Movie[];
   @Input() public searchTerm: string;
+  @Input() public searchError: string;
 
   @Output() public enterSearch: EventEmitter<string> = new EventEmitter();
   @Output() public clearSearch: EventEmitter<void> = new EventEmitter();
   @Output() public nominateMovie: EventEmitter<Movie> = new EventEmitter();
   @Output() public changePage: EventEmitter<number> = new EventEmitter();
 
-  public columns: string[] = ["poster", "title", "year", "nomination"];
+  public columns: string[] = ["Poster", "Title", "Year", "Nomination"];
   public dataSource;
 
-  ngOnChanges(): void {
-    this.dataSource = new MatTableDataSource<Movie>(this.movies);
+  private searchDebounceSubscription: Subscription;
+  public isTableLoading = false;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.hasOwnProperty("movies")) {
+      this.dataSource = new MatTableDataSource<Movie>(this.movies);
+      this.isTableLoading = false;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.searchDebounceSubscription = fromEvent(
+      this.input.nativeElement,
+      "keyup"
+    )
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        tap(() => {
+          this.search(this.searchTerm);
+        })
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.searchDebounceSubscription.unsubscribe();
   }
 
   public handleKeydown(event: KeyboardEvent) {
     if (event.key == "Enter") {
-      this.handleSearch();
+      this.search(this.searchTerm);
     }
   }
 
-  public handleSearch(): void {
-    this.enterSearch.emit(this.searchTerm);
+  private search(searchTerm: string): void {
+    if (searchTerm.length === 0 || !searchTerm.trim()) {
+      this.searchError = "";
+      return;
+    }
+    this.isTableLoading = true;
+    this.enterSearch.emit(searchTerm);
   }
 
   public handleClearSearch(): void {
@@ -52,6 +96,9 @@ export class ResultPanelComponent implements OnChanges {
   }
 
   public handlePaginatorChange(event): void {
+    if (this.searchTerm.length === 0 || !this.searchTerm.trim()) {
+      return;
+    }
     this.changePage.emit(event.pageIndex);
   }
 
@@ -70,6 +117,14 @@ export class ResultPanelComponent implements OnChanges {
         (nominatedMovie) => nominatedMovie.imdbID === movie.imdbID
       )
     );
+  }
+
+  public isMoviePosterValid(movie: Movie): boolean {
+    return movie.Poster && movie.Poster !== "N/A";
+  }
+
+  public getColumnDisplayName(column: string): string {
+    return column === "Nomination" ? "" : column;
   }
 
   public get paginatorIndex(): number {

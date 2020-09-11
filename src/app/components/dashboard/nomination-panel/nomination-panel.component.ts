@@ -10,12 +10,14 @@ import {
 import { Movie } from "../../../models/omdb.model";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { ClipboardHelper } from "../../helpers/clipboard.helper";
+import { fadeInOnEnterAnimation } from "angular-animations";
 
 @Component({
   selector: "nomination-panel",
   templateUrl: "./nomination-panel.component.html",
   styleUrls: ["./nomination-panel.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [fadeInOnEnterAnimation()],
 })
 export class NominationPanelComponent implements OnChanges {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -25,8 +27,10 @@ export class NominationPanelComponent implements OnChanges {
     string
   > = new EventEmitter();
 
-  public columns: string[] = ["poster", "title", "year", "nomination"];
+  public columns: string[] = ["Poster", "Title", "Year", "Nomination"];
   public dataSource;
+
+  public expandedMovieId: string;
 
   ngOnChanges(): void {
     this.dataSource = new MatTableDataSource<Movie>([...this.nominatedMovies]);
@@ -42,5 +46,13 @@ export class NominationPanelComponent implements OnChanges {
 
   public handleShareClick(): void {
     ClipboardHelper.copyToClipboard(window.location.toString());
+  }
+
+  public isMoviePosterValid(movie: Movie): boolean {
+    return movie.Poster && movie.Poster !== "N/A";
+  }
+
+  public getColumnDisplayName(column: string): string {
+    return column === "Nomination" ? "" : column;
   }
 }

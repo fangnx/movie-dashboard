@@ -9,7 +9,8 @@
         #tooltip="matTooltip"
         matTooltip="Copy URL to save the nominations"
         matTooltipPosition="left"
-        matTooltipHideDelay="500"
+        matTooltipHideDelay="300"
+        aria-label="Copy URL to save the nominations"
         color="primary"
       >
         Save Nominations
@@ -18,40 +19,43 @@
   </section>
 
   <section>
-    <mat-table [dataSource]="dataSource">
-      <ng-container matColumnDef="poster">
-        <mat-header-cell *matHeaderCellDef>Poster</mat-header-cell>
-        <mat-cell *matCellDef="let movie">
-          <img [src]="movie.Poster" />
+    <mat-table [dataSource]="dataSource" multiTemplateDataRows>
+      <ng-container [matColumnDef]="column" *ngFor="let column of columns">
+        <mat-header-cell *matHeaderCellDef>
+          {{ getColumnDisplayName(column) }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let movie" [ngSwitch]="column">
+          <ng-container *ngSwitchCase="'Poster'">
+            <img
+              *ngIf="isMoviePosterValid(movie)"
+              [src]="movie.Poster"
+              loading="lazy"
+              alt=""
+            />
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'Nomination'">
+            <button
+              (click)="handleRemoveClick(movie)"
+              class="small"
+              mat-raised-button
+              color="basic"
+            >
+              Remove
+            </button>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            {{ movie[column] }}
+          </ng-container>
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="title">
-        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-        <mat-cell *matCellDef="let movie">{{ movie.Title }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="year">
-        <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
-        <mat-cell *matCellDef="let movie">{{ movie.Year }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="nomination">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let movie">
-          <button
-            (click)="handleRemoveClick(movie)"
-            class="small"
-            mat-raised-button
-            color="basic"
-          >
-            Remove
-          </button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row
+        [@fadeInOnEnter]
+        *matRowDef="let movie; columns: columns"
+      ></mat-row>
     </mat-table>
   </section>
 

@@ -8,7 +8,7 @@
     "config:prod": "npm run config -- --env=prod",
     "start": "npm run config:dev && ng serve",
     "build": "npm run config:prod && ng build",
-    "build-publish": "npm run config:prod && ng build --output-path docs --baseHref='https://fangnx.github.io/movie-nominations/'",
+    "build-publish": "npm run config:prod && ng build --output-hashing=all --output-path docs --baseHref='https://fangnx.github.io/movie-nominations/'",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -28,6 +28,7 @@
     "@ngrx/effects": "^8.4.0",
     "@ngrx/entity": "^8.4.0",
     "@ngrx/store": "^8.4.0",
+    "angular-animations": "^0.11.0",
     "dotenv": "^8.2.0",
     "ngrx-store-localstorage": "^10.0.0",
     "rxjs": "~6.4.0",

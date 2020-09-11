@@ -3,61 +3,66 @@
     <article>
       <mat-form-field>
         <mat-label>Search Movies</mat-label>
-        <input
-          (keydown)="handleKeydown($event)"
-          [(ngModel)]="searchTerm"
-          matInput
-          type="text"
-        />
+        <input [(ngModel)]="searchTerm" matInput type="text" #searchInput />
         <button
           (click)="handleClearSearch()"
           mat-button
           matSuffix
           mat-icon-button
+          matTooltip="Clear"
+          matTooltipPosition="below"
+          matTooltipHideDelay="100"
           aria-label="Clear"
         >
           <mat-icon>close</mat-icon>
         </button>
+
+        <mat-hint align="start">
+          <strong>{{ searchError }}</strong>
+        </mat-hint>
       </mat-form-field>
     </article>
   </section>
 
   <section>
-    <mat-table [dataSource]="dataSource">
-      <ng-container matColumnDef="poster">
-        <mat-header-cell *matHeaderCellDef>Poster</mat-header-cell>
-        <mat-cell *matCellDef="let movie">
-          <img [src]="movie.Poster" />
+    <mat-table [dataSource]="dataSource" multiTemplateDataRows>
+      <ng-container [matColumnDef]="column" *ngFor="let column of columns">
+        <mat-header-cell *matHeaderCellDef>
+          {{ getColumnDisplayName(column) }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let movie" [ngSwitch]="column">
+          <ng-container *ngSwitchCase="'Poster'">
+            <img
+              *ngIf="isMoviePosterValid(movie)"
+              loading="lazy"
+              alt=""
+              [src]="movie.Poster"
+            />
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'Nomination'">
+            <button
+              (click)="handleNominationClick(movie)"
+              [disabled]="!canNominate(movie)"
+              class="small"
+              mat-raised-button
+              color="basic"
+            >
+              Nominate
+            </button>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            {{ movie[column] }}
+          </ng-container>
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="title">
-        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-        <mat-cell *matCellDef="let movie">{{ movie.Title }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="year">
-        <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
-        <mat-cell *matCellDef="let movie">{{ movie.Year }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="nomination">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let movie">
-          <button
-            (click)="handleNominationClick(movie)"
-            [disabled]="!canNominate(movie)"
-            class="small"
-            mat-raised-button
-            color="basic"
-          >
-            Nominate
-          </button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row
+        [@fadeInOnEnter]
+        *matRowDef="let movie; columns: columns"
+      ></mat-row>
     </mat-table>
   </section>
 

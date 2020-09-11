@@ -2,12 +2,18 @@
 
 An minimal Angular app to let users nominate their favorite movies from IMDB.
 
+This app is deployed to GitHub pages. You can view the live demo [here](https://fangnx.github.io/movie-nominations/).
+
 ### Built With
 
 - Angular 8.2
-- NgRx 8.4
-- Angular Material 8.2.3
+- [NgRx](https://ngrx.io/) - to manage state and isolate side effects
+- [Angular Material](https://material.angular.io/) - to build responsive, mobile-friendly UI components
 - [OMDb API](http://www.omdbapi.com/)
+
+### Screenshot
+
+![](demo-image.jpg)
 
 ## Getting Started
 

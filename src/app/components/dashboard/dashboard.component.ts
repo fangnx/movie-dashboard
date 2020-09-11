@@ -8,9 +8,11 @@ import {
   selectNumOfResults,
   selectPage,
   selectSearchTerm,
+  selectSearchError,
 } from "../../state/app.selector";
 import { AppState } from "../../state/app.reducer";
 import * as AppActions from "src/app/state/app.actions";
+import { fadeInOnEnterAnimation } from "angular-animations";
 import { Movie } from "../../models/omdb.model";
 
 @Component({
@@ -18,12 +20,14 @@ import { Movie } from "../../models/omdb.model";
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [fadeInOnEnterAnimation()],
 })
 export class DashboardComponent implements OnInit {
   public movies$: Observable<Movie[]>;
   public numOfResults$: Observable<Number>;
   public page$: Observable<Number>;
   public searchTerm$: Observable<string>;
+  public searchError$: Observable<string>;
   public nominatedMovies$: Observable<Movie[]>;
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute) {}
@@ -44,6 +48,8 @@ export class DashboardComponent implements OnInit {
     );
 
     this.searchTerm$ = this.store.select((state) => selectSearchTerm(state));
+
+    this.searchError$ = this.store.select((state) => selectSearchError(state));
   }
 
   private initNominations(): void {

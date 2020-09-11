@@ -16,6 +16,7 @@ export interface AppState extends EntityState<Movie> {
   movies: Movie[];
   searchTerm: string;
   numOfResults: number;
+  searchError: string;
   page: number;
   nominatedMovies: Movie[];
 }
@@ -28,6 +29,7 @@ export const adapter: EntityAdapter<Movie> = createEntityAdapter<Movie>({
 const initialState: AppState = adapter.getInitialState(<AppState>{
   searchTerm: null,
   numOfResults: 0,
+  searchError: "",
   page: 1,
   nominatedMovies: [],
 });
@@ -37,11 +39,12 @@ export function appReducer(state, action) {
     initialState,
     on(fetchMoviesSuccess, (state, { searchResponse, resetPage }) => {
       const page: number = resetPage ? 1 : state.page;
-      if (searchResponse.Response) {
+      if (!searchResponse.Error) {
         return {
           ...state,
           movies: searchResponse.Search,
           numOfResults: +searchResponse.totalResults,
+          searchError: "",
           page,
         };
       }
@@ -49,6 +52,7 @@ export function appReducer(state, action) {
         ...state,
         movies: [],
         numOfResults: 0,
+        searchError: searchResponse.Error,
         page,
       };
     }),
@@ -78,6 +82,7 @@ export function appReducer(state, action) {
     on(clearSearch, (state) => ({
       ...state,
       searchTerm: null,
+      searchError: "",
       page: 1,
       movies: [],
     })),

@@ -27,3 +27,8 @@ export const selectSearchTerm = createSelector(
   selectAppState,
   (state: AppState) => state.searchTerm
 );
+
+export const selectSearchError = createSelector(
+  selectAppState,
+  (state: AppState) => state.searchError
+);
